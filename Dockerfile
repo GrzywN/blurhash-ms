@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["bun", "index.js"]
+CMD ["bun", "index.ts"]
