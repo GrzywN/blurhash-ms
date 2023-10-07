@@ -8,7 +8,7 @@ Bun.serve({
       case "/": return homeRoute(req);
     }
 
-    return new Response(null, { status: 422 });
+    return new Response(null, { status: 400 });
   },
   error(error) {
     return new Response(`<pre>${error}\n${error.stack}</pre>`, {
