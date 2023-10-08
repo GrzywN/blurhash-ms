@@ -17,11 +17,7 @@ This project was created using `bun init` in bun v1.0.4. [Bun](https://bun.sh) i
 # Using with docker
 
 ```bash
-docker build -t blurhash-ms .
-```
-
-```bash
-docker run -dp 127.0.0.1:3000:3000 blurhash-ms
+docker-compose up --build --force-recreate
 ```
 
 And the bun server should be running on localhost:3000.

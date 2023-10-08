@@ -1,0 +1,24 @@
+version: '3.8'
+
+networks:
+  private:
+    driver: bridge
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - redis
+    networks:
+      - private
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    networks:
+      - private
