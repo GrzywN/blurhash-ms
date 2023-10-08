@@ -2,8 +2,13 @@
   "name": "blurhash-ms",
   "module": "index.js",
   "type": "module",
+  "scripts": {
+    "format:check": "prettier .",
+    "format:write": "prettier --write ."
+  },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prettier": "3.0.3"
   },
   "peerDependencies": {
     "typescript": "5.0.0"
