@@ -2,8 +2,10 @@ import { z } from 'zod';
 import { schema } from '../schemas/blurhash-post-body';
 import { BlurhashService } from '../services/blurhash-service';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { RedisDatabase } from '../database/cache/redis-database';
 
 const service = new BlurhashService();
+const cache = RedisDatabase.getInstance();
 
 async function post(request: Request): Promise<Response> {
   let body: unknown;
@@ -29,9 +31,17 @@ async function post(request: Request): Promise<Response> {
   }
 
   try {
+    const cachedBlurhash = await cache.get(parsedBody.imageUrl);
+
+    if (typeof cachedBlurhash === 'string') {
+      return Response.json({ blurhash: cachedBlurhash})
+    }
+
     const blurhash = await service.generateBlurhashFromImageUrl(
       parsedBody.imageUrl,
     );
+
+    await cache.set(parsedBody.imageUrl, blurhash);
 
     return Response.json({ blurhash }, { status: 200 });
   } catch (error: unknown) {
