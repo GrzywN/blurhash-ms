@@ -1,6 +1,9 @@
 import { blurhashRoute } from './src/routes/blurhash-route';
 import { homeRoute } from './src/routes/home-route';
 import { log } from './src/utils/logger';
+import { RedisDatabase } from './src/database/cache/redis-database';
+
+await RedisDatabase.init();
 
 const port = process.env.PORT || 3000;
 
