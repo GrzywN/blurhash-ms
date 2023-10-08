@@ -3,8 +3,6 @@ import { encode as encodeBlurhash } from 'blurhash';
 import sharp from 'sharp';
 
 class BlurhashService {
-  constructor() {}
-
   private static readonly BLUR_FACTOR = 5;
 
   public get blurFactor() {
@@ -14,16 +12,28 @@ class BlurhashService {
   public async generateBlurhashFromImageUrl(
     imageUrl: string,
   ): OrThrows<Promise<String>> {
+    const buffer = await this.fetchImageBuffer(imageUrl);
+
+    return await this.generateBlurhashFromBuffer(buffer);
+  }
+
+  private async fetchImageBuffer(imageUrl: string): Promise<Buffer> {
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     const buffer = Buffer.from(response.data, 'utf-8');
 
-    const { data: pixels, info: metadata } = await sharp(buffer)
+    return buffer;
+  }
+
+  private async generateBlurhashFromBuffer(
+    imageBuffer: Buffer,
+  ): OrThrows<Promise<String>> {
+    const { data: pixels, info: metadata } = await sharp(imageBuffer)
       .raw()
       .ensureAlpha()
       .toBuffer({ resolveWithObject: true });
 
     const clamped = new Uint8ClampedArray(pixels);
-    const encoded = encodeBlurhash(
+    const blurhash = encodeBlurhash(
       clamped,
       metadata.width,
       metadata.height,
@@ -31,10 +41,8 @@ class BlurhashService {
       BlurhashService.BLUR_FACTOR,
     );
 
-    return encoded;
+    return blurhash;
   }
-
-  // TODO: implement generateBlurhashFromBuffer(imageBuffer: Buffer)
 }
 
 export { BlurhashService };
