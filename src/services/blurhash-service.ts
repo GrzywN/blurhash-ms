@@ -11,7 +11,7 @@ class BlurhashService {
 
   public async generateBlurhashFromImageUrl(
     imageUrl: string,
-  ): OrThrows<Promise<String>> {
+  ): OrThrows<Promise<string>> {
     const buffer = await this.fetchImageBuffer(imageUrl);
 
     return await this.generateBlurhashFromBuffer(buffer);
@@ -26,7 +26,7 @@ class BlurhashService {
 
   private async generateBlurhashFromBuffer(
     imageBuffer: Buffer,
-  ): OrThrows<Promise<String>> {
+  ): OrThrows<Promise<string>> {
     const { data: pixels, info: metadata } = await sharp(imageBuffer)
       .raw()
       .ensureAlpha()
