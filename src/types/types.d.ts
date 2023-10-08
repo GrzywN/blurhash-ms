@@ -1,0 +1,1 @@
+type OrThrows<T> = T;
