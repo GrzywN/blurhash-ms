@@ -3,8 +3,13 @@ import { schema } from '../schemas/blurhash-post-body';
 import { BlurhashService } from '../services/blurhash-service';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { RedisDatabase } from '../database/cache/redis-database';
+import { BlurhashFacadeImpl } from '../facades/blurhash/blurhash-facade-impl';
+import { ImageProcessingFacadeImpl } from '../facades/image-processing/image-processing-facade-impl';
 
-const service = new BlurhashService();
+const service = new BlurhashService(
+  new BlurhashFacadeImpl(),
+  new ImageProcessingFacadeImpl(),
+);
 const cache = RedisDatabase.getInstance();
 
 async function post(request: Request): Promise<Response> {
@@ -34,7 +39,7 @@ async function post(request: Request): Promise<Response> {
     const cachedBlurhash = await cache.get(parsedBody.imageUrl);
 
     if (typeof cachedBlurhash === 'string') {
-      return Response.json({ blurhash: cachedBlurhash})
+      return Response.json({ blurhash: cachedBlurhash });
     }
 
     const blurhash = await service.generateBlurhashFromImageUrl(

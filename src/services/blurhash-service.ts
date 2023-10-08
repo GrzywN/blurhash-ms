@@ -1,8 +1,13 @@
 import axios from 'axios';
-import { encode as encodeBlurhash } from 'blurhash';
-import sharp from 'sharp';
+import { BlurhashFacade } from '../facades/blurhash/blurhash-facade';
+import { ImageProcessingFacade } from '../facades/image-processing/image-processing-facade';
 
 class BlurhashService {
+  constructor(
+    private blurhashFacade: BlurhashFacade,
+    private imageProcessingFacade: ImageProcessingFacade,
+  ) {}
+
   private static readonly BLUR_FACTOR = 5;
 
   public get blurFactor() {
@@ -27,16 +32,13 @@ class BlurhashService {
   private async generateBlurhashFromBuffer(
     imageBuffer: Buffer,
   ): OrThrows<Promise<string>> {
-    const { data: pixels, info: metadata } = await sharp(imageBuffer)
-      .raw()
-      .ensureAlpha()
-      .toBuffer({ resolveWithObject: true });
+    const { width, height, pixels } =
+      await this.imageProcessingFacade.extractDataFromImageBuffer(imageBuffer);
 
-    const clamped = new Uint8ClampedArray(pixels);
-    const blurhash = encodeBlurhash(
-      clamped,
-      metadata.width,
-      metadata.height,
+    const blurhash = await this.blurhashFacade.encode(
+      pixels,
+      width,
+      height,
       BlurhashService.BLUR_FACTOR,
       BlurhashService.BLUR_FACTOR,
     );
