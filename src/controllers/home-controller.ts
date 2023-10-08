@@ -1,5 +1,5 @@
 function get(request: Request): Response {
-  return new Response('Bun with ts as well!');
+  return new Response('Bun HTTP server is running!');
 }
 
 export { get };
