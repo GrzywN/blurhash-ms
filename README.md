@@ -1,5 +1,5 @@
 # Blurhash microservice
-#### Video Demo:  <URL HERE>
+#### Video Demo: https://youtu.be/cbLgWB0isoE
 #### Description:
 A microservice that takes an image from a URL and responds with the respective blurhash. It allows developers to improve the user experience by providing image placeholders with a blurry color representation of the image during loading. It can also help create blurred backgrounds for images with different aspect ratios, such as a vertically oriented image on a landscape.
 
@@ -26,7 +26,7 @@ A microservice that takes an image from a URL and responds with the respective b
 
 ## Demo
 
-Insert gif or link to demo
+[Youtube](https://youtu.be/cbLgWB0isoE)
 
 
 ## FAQ
